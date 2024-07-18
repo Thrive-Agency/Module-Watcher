@@ -2,7 +2,7 @@
 /*
 Plugin Name: Watch Modules
 Description: Module Watcher
-Version: 1.7
+Version: 1.8
 Author: Thrive Agency
 */
 
@@ -56,7 +56,7 @@ function is_plugin_installed($plugin_slug) {
 
 // Function to send email notification
 function plugin_checker_send_email_notification($plugin_slugs) {
-    $to = 'greg.white@thriveagency.com'; // Change to your email address
+    $to = 'support@thriveagency.com'; // Change to your email address
     $site_url = get_site_url(); // Get the site URL
     $subject = 'Nefarious Plugins Detected on '. $site_url;
     $message = 'The following nefarious plugins have been detected on the site:<br><br>';
