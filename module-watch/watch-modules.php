@@ -2,8 +2,11 @@
 /*
 Plugin Name: Watch Modules
 Description: Module Watcher
-Version: 1.8
+Version: 1.9
 Author: Thrive Agency
+Author URI: https://thriveagency.com
+GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
+GitHub Access Token: your-github-access-token
 */
 
 // Register activation hook
@@ -29,6 +32,12 @@ add_action('plugin_checker_daily_event', 'plugin_checker_check_plugins');
 function plugin_checker_check_plugins() {
     $plugins_to_check = array(
         'fusion-optimizer-pro',
+        'HTML Page Sitemap',
+        'IM8-Exclude-Pages',
+        'exclude-pages-from-navigation',
+        'easy-logo-slider',
+        'SubHeading',
+        'wp-file-manager'
         //'akismet',
         //'classic-widgets'
         // Add more plugin slugs as needed
@@ -68,11 +77,11 @@ function plugin_checker_send_email_notification($plugin_slugs) {
     $headers = array('Content-Type: text/html; charset=UTF-8');
 
     $mail_sent = wp_mail($to, $subject, $message, $headers);
-
-    if ($mail_sent) {
-        error_log('Plugin checker email sent successfully.3');
-    } else {
-        error_log('Plugin checker email failed to send.3');
-    }
+    // Debug wp_mailing
+    //if ($mail_sent) {
+    //    error_log('Plugin checker email sent successfully.');
+    //} else {
+    //   error_log('Plugin checker email failed to send.');
+    //}
 }
 ?>
