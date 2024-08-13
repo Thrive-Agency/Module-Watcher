@@ -26,7 +26,7 @@ jobs:
       - name: Start MySQL service
         run: |
           sudo service mysql start
-          mysql -e 'CREATE DATABASE wp_test;'
+          mysql -u root -e 'CREATE DATABASE wp_test;'
 
       - name: Download and Install WP-CLI
         run: |
