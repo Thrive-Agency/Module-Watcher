@@ -1,91 +1,30 @@
-name: Build Test and Release Watch Modules Plugin
-
 on:
   push:
-    branches:
-      - main
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      
+# https://github.com/marketplace/actions/create-a-release-in-a-github-action
+name: Create Release
 
 jobs:
-  release:
+  build:
+    name: Create Release
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: wp_test
-        ports:
-          - '3306:3306'
-        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Zipping plugin
-        run: |
-          mkdir -p release
-          cd module-watch
-          zip -r ../release/module-watch.zip ./*
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          php-version: '7.4' # Change this to match current supported version
-      
-  
-      - name: Wait for MySQL to be ready
-        run: sleep 20
-
-      - name: Start MySQL service and Create Database
-        run: |
-          mysql -h 127.0.0.1 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS wp_test;'
-
-
-      - name: Download and Install WP-CLI
-        run: |
-          curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-          chmod +x wp-cli.phar
-          sudo mv wp-cli.phar /usr/local/bin/wp
-
-      - name: Verify WP-CLI Installation
-        run: |
-          wp --info
-  
-
-      - name: Set up WordPress
-        run: |
-          wp core download --path=/tmp/wordpress
-          wp config create --dbname=wp_test --dbuser=root --dbpass='password' --dbhost=127.0.0.1 --path=/tmp/wordpress
-          wp core install --url=http://localhost:8080 --title="Test Site" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --path=/tmp/wordpress
-          wp server --path=/tmp/wordpress &
-
-      - name: Install and Activate Plugin
-        run: |
-          wp plugin install release/module-watch.zip --activate --path=/tmp/wordpress
-          wp plugin is-installed module-watch --path=/tmp/wordpress
-
-      - name: Check Plugin Activation
-        run: |
-          wp plugin is-active module-watch --path=/tmp/wordpress
-          # Add other tests or PHPUnit tests to verify the plugin is running correctly
-
-      - name: Check WordPress server response after plugin activation
-        run: |
-          sleep 5
-          curl -I http://localhost:8080 | grep "200 OK"
-
-      - name: Push to Release Branch
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          # Attempt to checkout and pull the release branch, create it if it doesn't exist
-          if git rev-parse --verify release; then
-            get checkout release
-            git pull origin release
-          else
-            git checkout -b release
-          fi
-          mv release/module-watch.zip .
-          git add module-watch.zip
-          git commit -m "Automated release - added new zip file"
-          git push origin release
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
