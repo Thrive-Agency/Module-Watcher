@@ -55,7 +55,7 @@ jobs:
       - name: Check Plugin Activation
         run: |
           wp plugin is-active module-watch --path=/tmp/wordpress
-          pw
+          # Add other tests or PHPUnit tests to verify the plugin is running correctly
 
       - name: Check WordPress server response after plugin activation
         run: |
