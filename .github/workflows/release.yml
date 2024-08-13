@@ -16,7 +16,12 @@ jobs:
           MYSQL_DATABASE: wp_test
         ports:
           - '3306:3306'
-        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >
+          --health-cmd="mysqladmin ping -h localhost" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=3
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -32,9 +37,13 @@ jobs:
           php-version: '7.4' # Change this to match current supported version
       
   
-      - name: Start MySQL service
+      - name: Wait for MySQL to be ready
+        run: sleep 20
+
+      - name: Start MySQL service and Create Database
         run: |
-          mysql -h localhost -u root -p password -e 'CREATE DATABASE IF NOT EXISTS wp_test;'
+          mysql -h 127.0.0.1 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS wp_test;'
+
 
       - name: Download and Install WP-CLI
         run: |
@@ -50,7 +59,7 @@ jobs:
       - name: Set up WordPress
         run: |
           wp core download --path=/tmp/wordpress
-          wp config create --dbname=wp_test --dbuser=root --dbpass='password' --dbhost=localhost --path=/tmp/wordpress
+          wp config create --dbname=wp_test --dbuser=root --dbpass='password' --dbhost=127.0.0.1 --path=/tmp/wordpress
           wp db create --path=/tmp/wordpress
           wp core install --url=http://localhost:8080 --title="Test Site" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --path=/tmp/wordpress
           wp server --path=/tmp/wordpress &
