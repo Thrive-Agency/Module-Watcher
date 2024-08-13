@@ -60,8 +60,8 @@ jobs:
 
       - name: Install and Activate Plugin
         run: |
-          wp plugin is-installed module-watch --path=/tmp/wordpress
           wp plugin install release/module-watch.zip --activate --path=/tmp/wordpress
+          wp plugin is-installed module-watch --path=/tmp/wordpress
 
       - name: Check Plugin Activation
         run: |
