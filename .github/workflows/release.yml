@@ -13,10 +13,10 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: test
+          MYSQL_DATABASE: wp_test
         ports:
-          - '8888:3306'
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          - '3306:3306'
+        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
   
       - name: Start MySQL service
         run: |
-          mysql -h 127.0.0.1 --port 8888 -u root -p password -e 'CREATE DATABASE IF NOT EXISTS wp_test;'
+          mysql -h localhost -u root -p password -e 'CREATE DATABASE IF NOT EXISTS wp_test;'
 
       - name: Download and Install WP-CLI
         run: |
@@ -50,7 +50,7 @@ jobs:
       - name: Set up WordPress
         run: |
           wp core download --path=/tmp/wordpress
-          wp config create --dbname=wp_test --dbuser=root --dbpass='password' --dbhost=127.0.0.1:8888 --path=/tmp/wordpress
+          wp config create --dbname=wp_test --dbuser=root --dbpass='password' --dbhost=localhost --path=/tmp/wordpress
           wp db create --path=/tmp/wordpress
           wp core install --url=http://localhost:8080 --title="Test Site" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --path=/tmp/wordpress
           wp server --path=/tmp/wordpress &
