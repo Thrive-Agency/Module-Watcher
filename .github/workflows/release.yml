@@ -1,0 +1,59 @@
+name: Build Test and Release Watch Modules Plugin
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkou@v2
+
+      - name: Zipping plugin
+        run: |
+          mkdir -p release
+          zip -r release/thrive-watch-mudules.zip ./*
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1' # Change this to match current supported version
+
+      - name: Set up WordPress
+        run: |
+          curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+          chmod +x wp-cli.phar
+          sudo mv wp-cli.phar /usr/local/bin/wp
+          wp core download --path=/tmp/wordpress
+          wp config create --dbname=wp_test --dbuser=root --dbpass= --path=/tmp/wordpress
+          wp db create --path=/tmp/wordpress
+          wp core install --url=http://localhost:8080 --title="Test Site" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --path=/tmp/wordpress
+          wp server --path=/tmp/wordpress &
+
+      - name: Install and Activate Plugin
+        run: |
+          wp plugin is-installed module-watch --path=/tmp/wordpress
+          wp plugin install release/module-watch.zip --activate --path=/tmp/wordpress
+
+      - name: Check Plugin Activation
+        run: |
+          wp plugin is-active module-watch --path=/tmp/wordpress
+          pw
+
+      - name: Check WordPress server response after plugin activation
+        run: |
+          sleep 5
+          curl -I http://localhost:8080 | grep "200 OK"
+
+      - name: Push to Release Branch
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git checkout -b temp-release
+          mv release/module-watch.zip .
+          git add module-watch.zip
+          git commit -m "Automated release"
+          git push origin temp-release:release --force
