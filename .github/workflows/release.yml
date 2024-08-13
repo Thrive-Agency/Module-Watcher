@@ -24,7 +24,8 @@ jobs:
       - name: Zipping plugin
         run: |
           mkdir -p release
-          zip -r release/module-watch.zip ./*
+          cd module-watch
+          zip -r ../release/module-watch.zip ./*
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
