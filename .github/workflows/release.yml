@@ -55,7 +55,6 @@ jobs:
         run: |
           wp core download --path=/tmp/wordpress
           wp config create --dbname=wp_test --dbuser=root --dbpass='password' --dbhost=127.0.0.1 --path=/tmp/wordpress
-          wp db create --path=/tmp/wordpress
           wp core install --url=http://localhost:8080 --title="Test Site" --admin_user=admin --admin_password=admin --admin_email=admin@example.com --path=/tmp/wordpress
           wp server --path=/tmp/wordpress &
 
