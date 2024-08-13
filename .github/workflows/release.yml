@@ -21,6 +21,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4' # Change this to match current supported version
+      
+  
+      - name: Start MySQL service
+        run: |
+          sudo service mysql start
+          mysql -e 'CREATE DATABASE wp_test;'
 
       - name: Download and Install WP-CLI
         run: |
