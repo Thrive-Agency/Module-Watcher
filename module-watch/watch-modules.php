@@ -2,7 +2,7 @@
 /*
 Plugin Name: Watch Modules
 Description: Module Watcher
-Version: 1.9
+Version: 1.9.0
 Author: Thrive Agency
 Author URI: https://thriveagency.com
 GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
