@@ -24,7 +24,7 @@ jobs:
       - name: Zipping plugin
         run: |
           mkdir -p release
-          zip -r release/thrive-watch-mudules.zip ./*
+          zip -r release/module-watch.zip ./*
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
