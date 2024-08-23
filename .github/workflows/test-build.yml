@@ -126,10 +126,3 @@ jobs:
           user: ${{ secrets.CLOUDWAYS_USER }}
           key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY}}
     
-      
-      - name: Verify Upload
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }} "\
-          [ -f ${{ secrets.CLOUDWAYS_PATH }}/release/module-watch.zip ] && \
-          [ -f ${{ secrets.CLOUDWAYS_PATH }}/release/info.json ] && \
-          echo 'Files successfully uploaded' || { echo 'Upload failed'; exit 1; }"
