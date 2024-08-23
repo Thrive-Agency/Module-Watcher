@@ -96,7 +96,7 @@ jobs:
             "name": "Module Watch",
             "test": "test",
             "slug": "module-watch",
-            "author": "<a href=\"https://thriveagency.com\">Thrive Agency</a>",
+            "author": "Thrive Agency",
             "version": "%s",
             "requires": "3.0",
             "tested": "5.8",
