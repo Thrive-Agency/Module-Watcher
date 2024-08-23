@@ -81,6 +81,12 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+      
+      - name: Print working directory
+        run: pwd
+  
+      - name: List files
+        run: ls -R
 
       - name: Zipping plugin
         run: |
