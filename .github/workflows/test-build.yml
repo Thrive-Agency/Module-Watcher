@@ -98,7 +98,7 @@ jobs:
             "name" : "Module Watch",
             "slug" : "module-watch",
             "author" : "<a href='https://thriveagency.com'>Thrive Agency</a>",
-            "version": "$PLUGIN_VERSION",
+            "version" : "$PLUGIN_VERSION",
             "requires" : "3.0",
             "tested" : "5.8",
             "requires_php" : "5.3",
