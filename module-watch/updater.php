@@ -162,7 +162,7 @@ if( !class_exists('Thrive_Updater') ) {
 				&& 'update' === $options['action']
 				&& 'plugin' === $options[ 'type' ]
 			) {
-				// just clean the cache when new plugin version is installed
+				// Clear the cache when new plugin version is installed
 				delete_transient( $this->cache_key );
 			}
 
