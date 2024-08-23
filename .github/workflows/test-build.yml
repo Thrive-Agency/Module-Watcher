@@ -115,11 +115,11 @@ jobs:
             }
           }
           EOF
-          
+
       - name: Publish
         uses: nogsantos/scp-deploy@master
         with:
-          src: ./dist/*
+          src: release/*
           host: ${{ secrets.CLOUDWAYS_HOST }}
           remote: ${{ secrets.CLOUDWAYS_PATH }}
           port: 22
