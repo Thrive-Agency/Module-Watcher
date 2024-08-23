@@ -10,7 +10,7 @@ env:
 
 jobs:
   tests:
-    if: env.SKIP_TESTS == 'false'
+    if: vars.SKIP_TESTS == 'false'
     runs-on: ubuntu-latest
     services:
       mysql:
