@@ -121,7 +121,7 @@ jobs:
         with:
           src: release/*
           host: ${{ secrets.CLOUDWAYS_HOST }}
-          remote: ${{ secrets.CLOUDWAYS_PATH }}/module-watch/ 
+          remote: ${{ secrets.CLOUDWAYS_PATH }}/plugins/module-watch/ 
           port: 22
           user: ${{ secrets.CLOUDWAYS_USER }}
           key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY}}
