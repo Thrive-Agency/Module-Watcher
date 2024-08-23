@@ -115,15 +115,17 @@ jobs:
             }
           }
           EOF
-      
-      - name: copy using key
-        uses: srueda99/scp-action@v12
+          
+      - name: Publish
+        uses: nogsantos/scp-deploy@master
         with:
-          port: 22
+          src: ./dist/*
           host: ${{ secrets.CLOUDWAYS_HOST }}
-          destination: ${{ secrets.CLOUDWAYS_PATH  }}/"
-          username: ${{ secrets.CLOUDWAYS_USER }}
-          key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}
+          remote: ${{ secrets.CLOUDWAYS_PATH }}
+          port: 22
+          user: ${{ secrets.CLOUDWAYS_USER }}
+          key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY}}
+    
       
       - name: Verify Upload
         run: |
