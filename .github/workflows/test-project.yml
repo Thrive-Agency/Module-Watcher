@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  release:
+  tests:
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -73,3 +73,56 @@ jobs:
         run: |
           sleep 5
           curl -I http://localhost:8080 | grep "200 OK"
+  
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Zipping plugin
+        run: |
+          mkdir -p release
+          zip -r release/module-watch.zip module-watch
+
+      - name: Create info.json
+        run: |
+          PLUGIN_VERSION=$(grep 'Version:' module-watch/module-watch.php | awk '{print $3}')
+          CHANGELOG=$(cat CHANGELOG.md | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+          cat  <<EOF > release/info.json
+          {
+            
+            "name" : "Module Watch",
+            "slug" : "module-watch",
+            "author" : "<a href='https://thriveagency.com'>Thrive Agency</a>",
+            "version": "$PLUGIN_VERSION"
+            "requires" : "3.0",
+            "tested" : "5.8",
+            "requires_php" : "5.3",
+            "last_updated" : "$(date +'%Y-%m-%d %H:%M:%S')",
+            "sections" : {
+              "description" : "Plugin for monitoring for bad plugins.",
+              "installation" : "Click the activate button",
+              "changelog" : "$CHANGELOG"
+            },
+            "banners" : {
+              "low" : "https://thriveagency.com/test.jpg",
+              "high" : "https://thriveagency.com/test.jpg"
+            }
+          }
+          EOF
+      - name: setup SSH
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            
+      - name: Deploy to Cloudways
+        run: |
+          scp -o StrictHostKeyChecking=no -r release ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }}:${{ secrets.CLOUDWAYS_PATH }}
+      
+      - name: Verify Upload
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }} "\
+          [ -f ${{ secrets.CLOUDWAYS_PATH }}/release/module-watch.zip ] && \
+          [ -f ${{ secrets.CLOUDWAYS_PATH }}/release/info.json ] && \
+          echo 'Files successfully uploaded' || { echo 'Upload failed'; exit 1; }"

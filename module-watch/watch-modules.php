@@ -9,6 +9,19 @@ GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
 GitHub Access Token: your-github-access-token
 */
 
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
+// Retrieve the plugin data from this file (plugin name, version, etc.) Then set a constant with the plugin version for use in the updater class
+$plugin_data = get_file_data(__FILE__, array('Version' => 'Version'), false);
+define('WATCH_MODULES_VERSION', $plugin_data['Version']);
+// Define the update server URL
+define('UPDATE_SERVER_URL', 'https://phpstack-1314194-4796733.cloudwaysapps.com/module-watch/');
+
+// Include the updater class
+require_once plugin_dir_path(__FILE__) . 'updater.php';
+
+
 // Register activation hook
 register_activation_hook(__FILE__, 'plugin_checker_on_activation');
 
