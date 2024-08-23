@@ -120,6 +120,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}
 
+      - name: Add SSH Key Manually
+        run: |
+          echo "${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}" > /home/runner/.ssh/cloudways_rsa
+          chmod 600 /home/runner/.ssh/cloudways_rsa
+          ssh-add /home/runner/.ssh/cloudways_rsa
+
       - name: Test SSH connection
         run: |
           ssh -o StrictHostKeyChecking=no -v ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }} "echo 'SSH connection successful'"
