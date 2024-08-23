@@ -5,12 +5,8 @@ on:
     branches:
       - main
 
-env:
-  SKIP_TESTS: false' # Set to true to skip tests
-
 jobs:
   tests:
-    if: vars.SKIP_TESTS == 'false'
     runs-on: ubuntu-latest
     services:
       mysql:
