@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  SKIP_TESTS: true
+  SKIP_TESTS: false # Set to true to skip tests
 
 jobs:
   tests:

@@ -2,7 +2,7 @@
 /*
 Plugin Name: Watch Modules
 Description: Module Watcher
-Version: 1.9.0
+Version: 1.9.1
 Author: Thrive Agency
 Author URI: https://thriveagency.com
 GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 $plugin_data = get_file_data(__FILE__, array('Version' => 'Version'), false);
 define('WATCH_MODULES_VERSION', $plugin_data['Version']);
 // Define the update server URL
-define('UPDATE_SERVER_URL', 'https://phpstack-1314194-4796733.cloudwaysapps.com/module-watch/');
+define('UPDATE_SERVER_URL', 'https://phpstack-1314194-4796733.cloudwaysapps.com/plugins/module-watch/');
 
 // Include the updater class
 require_once plugin_dir_path(__FILE__) . 'updater.php';
