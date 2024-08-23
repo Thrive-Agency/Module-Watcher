@@ -115,7 +115,7 @@ jobs:
             }
           }
           EOF
-      - name: setup SSH
+      - name: Setup SSH 
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}
