@@ -116,7 +116,7 @@ jobs:
           }
           EOF
 
-      - name: Publish
+      - name: Publish to Cloudways
         uses: nogsantos/scp-deploy@master
         with:
           src: release/*
