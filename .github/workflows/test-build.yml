@@ -92,27 +92,25 @@ jobs:
           PLUGIN_VERSION=$(grep -i 'Version:' module-watch/watch-modules.php | awk -F' *: *' '{print $2}' | xargs)
           PLUGIN_VERSION=$(echo $PLUGIN_VERSION | xargs)
           CHANGELOG=$(cat CHANGELOG.md | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
-          cat  <<EOF > release/info.json
-          {
-            "name" : "Module Watch",
-            "slug" : "module-watch",
-            "author" : "<a href='https://thriveagency.com'>Thrive Agency</a>",
-            "version" : "$PLUGIN_VERSION",
-            "requires" : "3.0",
-            "tested" : "5.8",
-            "requires_php" : "5.3",
-            "last_updated" : "$(date +'%Y-%m-%d %H:%M:%S')",
-            "sections" : {
-              "description" : "Plugin for monitoring for bad plugins.",
-              "installation" : "Click the activate button",
-              "changelog" : "$CHANGELOG"
+          printf '{
+            "name": "Module Watch",
+            "slug": "module-watch",
+            "author": "<a href=\"https://thriveagency.com\">Thrive Agency</a>",
+            "version": "%s",
+            "requires": "3.0",
+            "tested": "5.8",
+            "requires_php": "5.3",
+            "last_updated": "%s",
+            "sections": {
+              "description": "Plugin for monitoring for bad plugins.",
+              "installation": "Click the activate button",
+              "changelog": "%s"
             },
-            "banners" : {
-              "low" : "https://thriveagency.com/test.jpg",
-              "high" : "https://thriveagency.com/test.jpg"
+            "banners": {
+              "low": "https://thriveagency.com/test.jpg",
+              "high": "https://thriveagency.com/test.jpg"
             }
-          }
-          EOF
+          }' "$PLUGIN_VERSION" "$(date +'%Y-%m-%d %H:%M:%S')" "$CHANGELOG" > release/info.json
 
       - name: Publish to Cloudways
         uses: nogsantos/scp-deploy@master
