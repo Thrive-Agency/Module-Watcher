@@ -8,7 +8,7 @@ on:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    if: false # Add this line to disable the tests job temporarily
+    if: false # Add this line to disable the tests job
     services:
       mysql:
         image: mysql:8.0
