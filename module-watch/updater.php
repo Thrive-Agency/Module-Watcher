@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 if( !class_exists('Thrive_Updater') ) {
     class Thrive_Updater {
         // Initialize properties
-        public $plugin_slug;
+    public $plugin_slug;
 		public $version;
 		public $cache_key;
 		public $cache_allowed;
