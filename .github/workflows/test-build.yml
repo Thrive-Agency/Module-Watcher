@@ -115,24 +115,15 @@ jobs:
             }
           }
           EOF
-      - name: Setup SSH 
-        uses: webfactory/ssh-agent@v0.9.0
+      
+      - name: copy using key
+        uses: srueda99/scp-action@v12
         with:
-          ssh-private-key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}
-
-      - name: Add SSH Key Manually
-        run: |
-          echo "${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}" > /home/runner/.ssh/cloudways_rsa
-          chmod 600 /home/runner/.ssh/cloudways_rsa
-          ssh-add /home/runner/.ssh/cloudways_rsa
-
-      - name: Test SSH connection
-        run: |
-          ssh -o StrictHostKeyChecking=no -v ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }} "echo 'SSH connection successful'"
-          
-      - name: Deploy to Cloudways
-        run: |
-          scp -o StrictHostKeyChecking=no -rv release ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }}:${{ secrets.CLOUDWAYS_PATH }}
+          port: 22
+          host: ${{ secrets.CLOUDWAYS_HOST }}
+          destination: ${{ secrets.CLOUDWAYS_PATH  }}/"
+          username: ${{ secrets.CLOUDWAYS_USER }}
+          key: ${{ secrets.CLOUDWAYS_SSH_PRIVATE_KEY }}
       
       - name: Verify Upload
         run: |
