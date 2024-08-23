@@ -94,6 +94,7 @@ jobs:
           CHANGELOG=$(cat CHANGELOG.md | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
           printf '{
             "name": "Module Watch",
+            "test": "test",
             "slug": "module-watch",
             "author": "<a href=\"https://thriveagency.com\">Thrive Agency</a>",
             "version": "%s",
