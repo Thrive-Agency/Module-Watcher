@@ -90,6 +90,7 @@ jobs:
       - name: Create info.json
         run: |
           PLUGIN_VERSION=$(grep -i 'Version:' module-watch/watch-modules.php | awk -F' *: *' '{print $2}' | xargs)
+          PLUGIN_VERSION=$(echo $PLUGIN_VERSION | xargs)
           echo the plugin version is $PLUGIN_VERSION
           CHANGELOG=$(cat CHANGELOG.md | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
           cat  <<EOF > release/info.json
