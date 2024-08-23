@@ -87,7 +87,7 @@ jobs:
 
       - name: Create info.json
         run: |
-          PLUGIN_VERSION=$(grep 'Version:' module-watch/module-watch.php | awk '{print $3}')
+          PLUGIN_VERSION=$(grep 'Version:' module-watch/watch-modules.php | awk '{print $3}')
           CHANGELOG=$(cat CHANGELOG.md | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
           cat  <<EOF > release/info.json
           {
