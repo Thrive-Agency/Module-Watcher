@@ -17,6 +17,7 @@ defined( 'ABSPATH' ) || exit;
 
 
 if( !class_exists('Thrive_Updater') ) {
+
     class Thrive_Updater {
         // Initialize properties
     public $plugin_slug;
@@ -45,7 +46,7 @@ if( !class_exists('Thrive_Updater') ) {
 			if( false === $remote || ! $this->cache_allowed ) {
 
 				$remote = wp_remote_get(
-					$UPDATE_SERVER_URL . 'info.json',
+					UPDATE_SERVER_URL . 'info.json',
 					array(
 						'timeout' => 10,
 						'headers' => array(
