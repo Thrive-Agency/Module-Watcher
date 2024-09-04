@@ -2,7 +2,7 @@
 /*
 Plugin Name: Watch Modules
 Description: Module Watcher
-Version: 1.9.1
+Version: 1.9.3
 Author: Thrive Agency
 Author URI: https://thriveagency.com
 GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 $plugin_data = get_file_data(__FILE__, array('Version' => 'Version'), false);
 define('WATCH_MODULES_VERSION', $plugin_data['Version']);
 // Define the update server URL
-define('UPDATE_SERVER_URL', 'https://phpstack-1314194-4796733.cloudwaysapps.com/module-watch/');
+define('UPDATE_SERVER_URL', 'https://phpstack-1314194-4796733.cloudwaysapps.com/plugins/module-watch/');
 
 // Include the updater class
 require_once plugin_dir_path(__FILE__) . 'updater.php';
@@ -36,7 +36,7 @@ function plugin_checker_schedule_daily_cron() {
     if (!wp_next_scheduled('plugin_checker_daily_event')) {
         wp_schedule_event(time(), 'daily', 'plugin_checker_daily_event');
     }
-}
+} 
 
 // Hook daily cron job function
 add_action('plugin_checker_daily_event', 'plugin_checker_check_plugins');
