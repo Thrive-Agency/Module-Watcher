@@ -14,17 +14,10 @@ defined( 'ABSPATH' ) || exit;
  * @package watch-modules
  */
 
-//TODO - set this better compartmentalize this class and set it up to be used in other plugins
+//TODO - Better compartmentalize this class and set it up to be used in other plugins
 
 if( !class_exists('Thrive_Updater') ) {
-
-    // Ensure constants are defined before using them
-    if( defined('WATCH_MODULES_VERSION') && defined('UPDATE_SERVER_URL') ) {
-        
-        
-    } else {
-        
-    }
+    //TODO - Add a check for the existence of needed constants defined in the main plugin file
 
     class Thrive_Updater {
         // Initialize properties
@@ -36,9 +29,9 @@ if( !class_exists('Thrive_Updater') ) {
         public function __construct() {
 
             $this->plugin_slug = 'module-watch';
-            $this->version = defined('WATCH_MODULES_VERSION') ? WATCH_MODULES_VERSION : '1.0.0'; // Default version
+            $this->version = defined('WATCH_MODULES_VERSION') ? WATCH_MODULES_VERSION : '1.0.0'; // Default version failover
             $this->cache_key = 'watch_modules_update';
-            $this->cache_allowed = false; // Set to true to allow caching
+            $this->cache_allowed = true; // Set to true to allow caching
 
             add_filter( 'plugins_api', array( $this, 'info'), 20, 3);
             add_filter( 'site_transient_update_plugins', array( $this, 'update' ) );
@@ -138,6 +131,7 @@ if( !class_exists('Thrive_Updater') ) {
             return $res;
         }
 
+        // Check for plugin updates and set the update details
         public function update( $transient ) {
 
             if ( empty($transient->checked ) ) {
@@ -154,10 +148,10 @@ if( !class_exists('Thrive_Updater') ) {
             ) {
                 $res = new stdClass();
                 $res->slug = $this->plugin_slug;
-                $res->plugin = plugin_basename(dirname(__FILE__) . '/watch-modules.php');
+                $res->plugin = plugin_basename(dirname(__FILE__) . '/watch-modules.php'); //TODO Define the main plugin file in the main plugin file
                 $res->new_version = $remote->version;
-								$res->requires = $remote->requires;
-								$res->tested = $remote->tested;
+				$res->requires = $remote->requires;
+				$res->tested = $remote->tested;
                 $res->tested = $remote->tested;
                 $res->package = $remote->download_url ?? "https://phpstack-1314194-4796733.cloudwaysapps.com/plugins/module-watch/module-watch.zip";
 

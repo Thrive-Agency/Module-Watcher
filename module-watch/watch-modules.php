@@ -5,6 +5,7 @@ Description: Module Watcher
 Version: 1.10.0
 Author: Thrive Agency
 Author URI: https://thriveagency.com
+//TODO: Remove Github Plugin URI and GitHub Access Token
 GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
 GitHub Access Token: your-github-access-token
 */
