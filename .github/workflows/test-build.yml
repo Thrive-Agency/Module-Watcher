@@ -98,6 +98,7 @@ jobs:
             "tested": "5.8",
             "requires_php": "5.3",
             "last_updated": "%s",
+            "download_link": "https://phpstack-1314194-4796733.cloudwaysapps.com/plugins/module-watch/module-watch.zip", 
             "sections": {
               "description": "Plugin for monitoring for bad plugins.",
               "installation": "Click the activate button",
