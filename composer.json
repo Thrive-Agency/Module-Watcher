@@ -7,8 +7,8 @@
     },
     "autoload": {
         "psr-4": {
-            "ThriveAgency\\ModuleWatcher\\": "includes/"
-        }
+            "ThriveAgency\\Module-Watcher\\": "includes/"
+        } 
     },
     "extra": {
         "wordpress-plugin": {
