@@ -12,12 +12,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'  # Adjust to your PHP version if needed
+
     - name: Prepare Plugin Zip
       run: |
         mkdir -p build
-        cp -r module-watcher/* build/
+        cp -r module-watcher build/
         cd build
-        zip -r module-watcher.zip *
+        zip -r module-watcher.zip module-watcher
         cd ..
         echo "module-watcher.zip prepared successfully."
 
