@@ -22,14 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+      
       - name: Build project
-        run: |
+        run:
           mkdir build
+      
       - name: Create artifact
-        #uses: montudor/action-zip@v0.1.0 
-        #with:
-          run: zip -r build/module-watcher.zip
+        run: zip -r build/module-watcher.zip
+      
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
