@@ -27,9 +27,9 @@ jobs:
         run: |
           mkdir build
       - name: Create artifact
-        uses: montudor/action-zip@v0.1.0 
-        with:
-          args: zip -r build/module-watcher.zip
+        #uses: montudor/action-zip@v0.1.0 
+        #with:
+          run: zip -r build/module-watcher.zip
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
