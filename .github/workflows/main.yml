@@ -17,13 +17,13 @@ jobs:
         mkdir -p build
         cp -r module-watch/* build/
         cd build
-        zip -r module-watch.zip *
+        zip -r module-watcher.zip *
         cd ..
-        echo "module-watch.zip prepared successfully."
+        echo "module-watcher.zip prepared successfully."
 
     - name: Upload Release Asset
       uses: softprops/action-gh-release@v1
       with:
-        files: build/module-watch.zip
+        files: build/module-watcher.zip
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}  # Use your PAT secret here
