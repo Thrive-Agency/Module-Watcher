@@ -6,6 +6,8 @@ Version: 1.0
 Author: Thrive Agency
 Author URI: https://thriveagency.com
 GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
+New token: token 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
+Old GitHub Access Token: token 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
 */ 
 
 // Register activation hook
@@ -103,6 +105,13 @@ class MyPluginUpdater {
             return $transient;
         }
 
+        $response = wp_remote_get($this->api_url, [
+            'headers' => [
+                'Authorization' => 'token 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',
+                'User-Agent'    => 'WordPress Plugin Updater'
+            ]
+        ]);
+ 
         if (is_wp_error($response)) {
             error_log("GitHub API Response Error: " . $response->get_error_message());
             return $transient;
@@ -149,6 +158,12 @@ class MyPluginUpdater {
             return false;
         }
 
+        $response = wp_remote_get($this->api_url, [
+            'headers' => [
+                'Authorization' => 'token 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',
+                'User-Agent'    => 'WordPress Plugin Updater'
+            ]
+        ]); 
 
         if (is_wp_error($response)) {
             error_log("GitHub API Response Error: " . $response->get_error_message());
