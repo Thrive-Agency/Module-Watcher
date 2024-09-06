@@ -2,15 +2,16 @@
 /*
 Plugin Name: Watch Modules
 Description: Module Watcher
-Version: 1.9
+Version: 1.2122
 Author: Thrive Agency
 Author URI: https://thriveagency.com
 GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
-GitHub Access Token: your-github-access-token
-*/
+New token: token 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
+Old GitHub Access Token: token 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
+*/ 
 
 // Register activation hook
-register_activation_hook(__FILE__, 'plugin_checker_on_activation');
+register_activation_hook(__FILE__, 'plugin_checker_on_activation'); 
 
 // Function to run on plugin activation
 function plugin_checker_on_activation() {
@@ -82,6 +83,118 @@ function plugin_checker_send_email_notification($plugin_slugs) {
     //    error_log('Plugin checker email sent successfully.');
     //} else {
     //   error_log('Plugin checker email failed to send.');
-    //}
+    //} 
 }
+
+// Updates
+class MyPluginUpdater {
+    private $api_url = 'https://api.github.com/repos/Thrive-Agency/Module-Watcher/releases/latest';
+    private $plugin_slug = 'module-watcher';  // Should match the folder name inside the ZIP
+    private $plugin_file;
+
+    public function __construct($plugin_file) {
+        $this->plugin_file = $plugin_file;
+        error_log("Plugin Updater Initialized");
+
+        add_filter('pre_set_site_transient_update_plugins', [$this, 'check_for_update']);
+        add_filter('plugins_api', [$this, 'plugin_info'], 20, 3);
+    }
+
+    public function check_for_update($transient) {
+        if (empty($transient->checked)) {
+            return $transient;
+        }
+
+        $response = wp_remote_get($this->api_url, [
+            'headers' => [
+                'Authorization' => 'token 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',
+                'User-Agent'    => 'WordPress Plugin Updater'
+            ]
+        ]);
+ 
+        if (is_wp_error($response)) {
+            error_log("GitHub API Response Error: " . $response->get_error_message());
+            return $transient;
+        }
+
+        $status_code = wp_remote_retrieve_response_code($response);
+        if ($status_code != 200) {
+            error_log("GitHub API Response Status Code: " . $status_code);
+            return $transient;
+        }
+
+        $data = json_decode(wp_remote_retrieve_body($response));
+        if (!isset($data->tag_name) || !isset($data->zipball_url)) {
+            error_log("Error decoding GitHub API response: " . wp_remote_retrieve_body($response));
+            return $transient;
+        }
+
+        $latest_version = $data->tag_name;
+        $plugin_data = get_plugin_data($this->plugin_file);
+        $current_version = $plugin_data['Version'];
+
+        error_log("Current Version: " . $current_version);
+        error_log("Latest Version: " . $latest_version);
+
+        if (version_compare($current_version, $latest_version, '<')) {
+            $plugin_update = new stdClass();
+            $plugin_update->slug = $this->plugin_slug;
+            $plugin_update->new_version = $latest_version;
+            $plugin_update->url = $data->html_url;
+            //$plugin_update->package = 'https://github.com/Thrive-Agency/Module-Watcher/releases/download/2.6/module-watcher.zip';
+
+            $plugin_update->package = $data->assets[0]->browser_download_url;
+
+            error_log("Update Available: " . print_r($plugin_update, true));
+
+            $transient->response[$this->plugin_slug . '/' . basename($this->plugin_file)] = $plugin_update;
+        }
+
+        return $transient;
+    }
+
+    public function plugin_info($res, $action, $args) {
+        if ($action !== 'plugin_information' || empty($args->slug) || $args->slug !== $this->plugin_slug) {
+            return false;
+        }
+
+        $response = wp_remote_get($this->api_url, [
+            'headers' => [
+                'Authorization' => 'token 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',
+                'User-Agent'    => 'WordPress Plugin Updater'
+            ]
+        ]); 
+
+        if (is_wp_error($response)) {
+            error_log("GitHub API Response Error: " . $response->get_error_message());
+            return false;
+        }
+
+        $status_code = wp_remote_retrieve_response_code($response);
+        if ($status_code != 200) {
+            error_log("GitHub API Response Status Code: " . $status_code);
+            return false;
+        }
+
+        $data = json_decode(wp_remote_retrieve_body($response));
+
+        $res = new stdClass();
+        $res->name = $data->name;
+        $res->slug = $this->plugin_slug;
+        $res->version = $data->tag_name;
+        $res->author = '<a href="https://github.com/Thrive-Agency">Thrive Support</a>';
+        $res->homepage = $data->html_url;
+        $res->requires = '5.0';
+        $res->tested = '7.8';
+        $res->download_link = $data->zipball_url;
+        $res->sections = [
+            'description' => $data->body,
+            'changelog' => $data->body
+        ];
+
+        return $res;
+    }
+}
+
+new MyPluginUpdater(__FILE__);
 ?>
