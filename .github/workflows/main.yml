@@ -15,7 +15,7 @@ jobs:
     - name: Prepare Plugin Zip
       run: |
         mkdir -p build
-        cp -r module-watch/* build/
+        cp -r module-watcher/* build/
         cd build
         zip -r module-watcher.zip *
         cd ..
