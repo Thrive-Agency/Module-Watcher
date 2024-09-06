@@ -12,13 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create ZIP file
+      - name: Create ZIP file yo
         run: |
           VERSION=$(echo "${{ github.event.release.tag_name }}" | sed 's/^v//')
           mkdir -p release
-          # Copy all files except the release directory itself
-          shopt -s extglob
-          cp -r !(release) release/
+          # Copy all files except the release directory itself using rsync
+          rsync -av --exclude='release' ./ release/
           cd release
           zip -r "../module-watcher-greg.zip" .
           cd ..
