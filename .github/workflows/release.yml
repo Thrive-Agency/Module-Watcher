@@ -29,7 +29,7 @@ jobs:
           mkdir build
       
       - name: Create artifact
-        run: zip -r build/module-watcher.zip
+        run: zip -r build/module-watcher.zip module-watcher
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
