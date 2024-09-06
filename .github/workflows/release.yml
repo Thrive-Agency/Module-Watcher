@@ -28,8 +28,8 @@ jobs:
           mkdir build
       - name: Create artifact
         uses: montudor/action-zip@v0.1.0
-        with: 
-          run: zip -r build/module-watcher.zip
+        with:
+          args: zip -X -r build/module-watcher.zip 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
