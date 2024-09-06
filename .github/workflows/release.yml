@@ -28,7 +28,7 @@ jobs:
           cd release
           zip -r "module-watcher-greg.zip" .
           mv "module-watcher-greg.zip" "../"
-        working-directory: ./
+        working-directory: ./module-watcher
 
       - name: Upload release asset
         uses: actions/upload-release-asset@v1
