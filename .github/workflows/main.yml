@@ -1,0 +1,22 @@
+name: Build and Release Plugin
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Prepare Plugin Zip
+      run: |
+        mkdir -p build
+        cp -r module-watch/* build/
+        cd build
+        zip -r modulewatcher.zip *
+        cd ..
+        gh release upload ${{ github.event.release.tag_name }} build/modulewatcher.zip
