@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Create ZIP file
+        run: |
+          VERSION=$(echo "${{ github.event.release.tag_name }}" | sed 's/^v//')
+          mkdir -p release
+          cp -r * release/
+          cd release
+          zip -r "module-watcher-greg.zip" .
+          mv "module-watcher-greg.zip" "../"
+        working-directory: ./module-watcher
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./module-watcher-greg.zip
+          asset_name: module-watcher-greg.zip
+          asset_content_type: application/zip
