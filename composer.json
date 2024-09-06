@@ -1,0 +1,20 @@
+{
+    "name": "thrive-agency/module-watcher",
+    "description": "A WordPress plugin to watch for module updates.",
+    "type": "wordpress-plugin",
+    "require": {
+        "php": ">=7.2"  // Adjust PHP version as needed
+    },
+    "autoload": {
+        "psr-4": {
+            "ThriveAgency\\ModuleWatcher\\": "includes/"
+        }
+    },
+    "extra": {
+        "wordpress-plugin": {
+            "name": "Module Watcher",
+            "slug": "module-watcher",
+            "version": "2.1"
+        }
+    }
+}
