@@ -16,8 +16,9 @@ jobs:
         run: |
           VERSION=$(echo "${{ github.event.release.tag_name }}" | sed 's/^v//')
           mkdir -p release
-          # Copy all files from the current directory to the release directory, excluding the release directory itself
-          find . -maxdepth 1 ! -name 'release' -exec cp -r {} release/ \;
+          # Copy all files except the release directory itself
+          shopt -s extglob
+          cp -r !(release) release/
           cd release
           zip -r "../module-watcher-greg.zip" .
           cd ..
