@@ -2,12 +2,10 @@
 /*
 Plugin Name: Watch Modules
 Description: Module Watcher
-Version: 2.7
+Version: 1.0 
 Author: Thrive Agency
 Author URI: https://thriveagency.com
 GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
-New token: token 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
-Old GitHub Access Token: token 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
 */ 
 
 // Register activation hook
@@ -107,7 +105,6 @@ class MyPluginUpdater {
 
         $response = wp_remote_get($this->api_url, [
             'headers' => [
-                'Authorization' => 'token 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',
                 'User-Agent'    => 'WordPress Plugin Updater'
             ]
         ]);
@@ -127,7 +124,7 @@ class MyPluginUpdater {
         if (!isset($data->tag_name) || !isset($data->zipball_url)) {
             error_log("Error decoding GitHub API response: " . wp_remote_retrieve_body($response));
             return $transient;
-        }
+        } 
 
         $latest_version = $data->tag_name;
         $plugin_data = get_plugin_data($this->plugin_file);
@@ -141,7 +138,7 @@ class MyPluginUpdater {
             $plugin_update->slug = $this->plugin_slug;
             $plugin_update->new_version = $latest_version;
             $plugin_update->url = $data->html_url;
-            //$plugin_update->package = 'https://github.com/Thrive-Agency/Module-Watcher/releases/download/2.6/module-watcher.zip';
+            //Hardcode test: $plugin_update->package = 'https://github.com/Thrive-Agency/Module-Watcher/releases/download/2.6/module-watcher.zip';
 
             $plugin_update->package = $data->assets[0]->browser_download_url;
 
@@ -160,7 +157,6 @@ class MyPluginUpdater {
 
         $response = wp_remote_get($this->api_url, [
             'headers' => [
-                'Authorization' => 'token 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',
                 'User-Agent'    => 'WordPress Plugin Updater'
             ]
         ]); 
