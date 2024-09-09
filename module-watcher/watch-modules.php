@@ -36,7 +36,8 @@ function plugin_checker_check_plugins() {
         'exclude-pages-from-navigation',
         'easy-logo-slider',
         'SubHeading',
-        'wp-file-manager'
+        'wp-file-manager',
+        'WP-SecurityPrime'
         //'akismet',
         //'classic-widgets'
         // Add more plugin slugs as needed
