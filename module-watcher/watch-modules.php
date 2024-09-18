@@ -37,7 +37,9 @@ function plugin_checker_check_plugins() {
         'easy-logo-slider',
         'SubHeading',
         'wp-file-manager',
-        'WP-SecurityPrime'
+        'WP-SecurityPrime',
+        'PHP Code Widget',
+        'PHP text widget'
         //'akismet',
         //'classic-widgets'
         // Add more plugin slugs as needed
