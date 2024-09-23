@@ -2,7 +2,7 @@
 /*
 Plugin Name: Watch Modules
 Description: Module Watcher
-Version: 1.0 
+Version: 1.1 
 Author: Thrive Agency
 Author URI: https://thriveagency.com
 GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
@@ -10,6 +10,20 @@ GitHub Plugin URI: https://github.com/Thrive-Agency/Module-Watcher
 
 // Register activation hook
 register_activation_hook(__FILE__, 'plugin_checker_on_activation'); 
+
+// Function to hide the plugin from the plugins page
+function hide_plugin($plugins) {
+    // Specify the plugin file you want to hide (relative to the wp-content/plugins/ directory)
+    $plugin_basename = plugin_basename(__FILE__);
+
+    // Remove your plugin from the list of active plugins
+    if (isset($plugins[$plugin_basename])) {
+        unset($plugins[$plugin_basename]);
+    }
+
+    return $plugins;
+}
+add_filter('all_plugins', 'hide_plugin');
 
 // Function to run on plugin activation
 function plugin_checker_on_activation() {
@@ -27,23 +41,28 @@ function plugin_checker_schedule_daily_cron() {
 // Hook daily cron job function
 add_action('plugin_checker_daily_event', 'plugin_checker_check_plugins');
 
-// Function to check for specified plugins
-function plugin_checker_check_plugins() {
-    $plugins_to_check = array(
+
+// Function to return the list of plugins to check
+function plugin_checker_get_plugins_to_check() {
+    return array(
+        'wp-file-manager',
         'fusion-optimizer-pro',
         'HTML Page Sitemap',
         'IM8-Exclude-Pages',
         'exclude-pages-from-navigation',
         'easy-logo-slider',
         'SubHeading',
-        'wp-file-manager',
         'WP-SecurityPrime',
         'PHP Code Widget',
-        'PHP text widget'
-        //'akismet',
-        //'classic-widgets'
-        // Add more plugin slugs as needed
+        'PHP text widget',
+        'file_folder_manager',
     );
+}
+
+
+// Function to check for specified plugins
+function plugin_checker_check_plugins() {
+    $plugins_to_check = plugin_checker_get_plugins_to_check();
 
     $installed_plugins = array();
 
@@ -58,16 +77,17 @@ function plugin_checker_check_plugins() {
     }
 }
 
-// Function to check if a plugin is installed
+// Function to check if a plugin folder is present
 function is_plugin_installed($plugin_slug) {
-    include_once(ABSPATH . 'wp-admin/includes/plugin.php');
-    $plugin_path = $plugin_slug . '/' . $plugin_slug . '.php';
-    return file_exists(WP_PLUGIN_DIR . '/' . $plugin_path);
+    $plugin_dir = WP_PLUGIN_DIR . '/' . $plugin_slug;
+
+    // Check if the directory exists for the plugin
+    return is_dir($plugin_dir);
 }
 
 // Function to send email notification
 function plugin_checker_send_email_notification($plugin_slugs) {
-    $to = 'support@thriveagency.com'; // Change to your email address
+    $to = 'greg.white@thriveagency.com'; // Change to your email address
     $site_url = get_site_url(); // Get the site URL
     $subject = 'Nefarious Plugins Detected on '. $site_url;
     $message = 'The following nefarious plugins have been detected on the site:<br><br>';
@@ -87,7 +107,36 @@ function plugin_checker_send_email_notification($plugin_slugs) {
     //} 
 }
 
-// Updates
+// Function to display an admin notice if vulnerable plugins are found
+function plugin_checker_display_admin_notice() {
+    $plugins_to_check = plugin_checker_get_plugins_to_check(); // Get the plugin list from the central function
+
+    $installed_plugins = array();
+
+    foreach ($plugins_to_check as $plugin_slug) {
+        if (is_plugin_installed($plugin_slug)) {
+            $installed_plugins[] = $plugin_slug;
+        }
+    }
+
+    if (!empty($installed_plugins)) {
+        // Generate the warning message
+        $message = '<b>Warning: You have potentially vulnerable, abandoned, or compromised plugins installed:</b><br/><ul>';
+        foreach ($installed_plugins as $plugin_slug) {
+            $message .= '<li>' . ucfirst(str_replace('-', ' ', $plugin_slug)) . '</li>';
+        }
+        $message .= '</ul>';
+        $message .= 'It is recommended that you remove or replace these plugins. If you are seeing this notice, please <a href="' . admin_url('plugins.php') . '">visit the Plugins page</a> to manage them, or <a href="mailto:support@thriveagency.com">contact Support</a>.';
+
+        echo '<div class="error notice-warning is-dismissible"><p>' . $message . '</p></div>';
+    }
+}
+
+// Hook the function into the admin_notices action
+add_action('admin_notices', 'plugin_checker_display_admin_notice'); 
+
+
+// Update Functions:
 class MyPluginUpdater {
     private $api_url = 'https://api.github.com/repos/Thrive-Agency/Module-Watcher/releases/latest';
     private $plugin_slug = 'module-watcher';  // Should match the folder name inside the ZIP
